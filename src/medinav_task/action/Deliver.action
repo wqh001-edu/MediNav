@@ -1,0 +1,11 @@
+# Deliver medicine action
+string order_id
+string ward
+---
+string final_state
+float32 elapsed_sec
+bool success
+---
+string state
+float32 progress
+float32 elapsed_sec

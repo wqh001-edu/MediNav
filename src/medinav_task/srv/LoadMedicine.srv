@@ -1,0 +1,6 @@
+# Confirm medicine loaded at pharmacy
+string order_id
+float32 mass_kg
+---
+bool success
+string message

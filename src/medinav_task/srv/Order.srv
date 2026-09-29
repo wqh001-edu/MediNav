@@ -1,0 +1,7 @@
+# Request a delivery to a named ward
+string ward          # e.g. ward_1 .. ward_4 or pharmacy
+string order_id      # optional client tag, empty = auto uuid
+---
+bool accepted
+string order_id
+string message

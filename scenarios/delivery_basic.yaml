@@ -1,0 +1,28 @@
+# S1 单机近端送药
+id: S1
+description: 药房 -> ward_1 -> 回药房
+ward: ward_1
+timeout_sec: 90
+success_criteria:
+  max_elapsed_sec: 45
+  zero_collision: true
+
+---
+# S2 远端送药
+id: S2
+description: 药房 -> ward_4 -> 回药房
+ward: ward_4
+timeout_sec: 120
+success_criteria:
+  max_elapsed_sec: 70
+  zero_collision: true
+
+---
+# S3 中部送药
+id: S3
+description: 药房 -> ward_3 -> 回药房
+ward: ward_3
+timeout_sec: 100
+success_criteria:
+  max_elapsed_sec: 55
+  zero_collision: true

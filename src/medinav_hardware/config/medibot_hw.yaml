@@ -1,0 +1,35 @@
+# Real MediBot hardware parameters (mirrors simulation)
+# Load this when bringup real robot; keep values identical to diff_drive_controller.yaml
+
+medibot_hardware:
+  ros__parameters:
+    wheel_separation: 0.32          # [m]
+    wheel_radius: 0.048             # [m]
+    max_linear_vel: 0.5             # [m/s]
+    max_angular_vel: 1.2            # [rad/s]
+    cmd_vel_timeout: 0.5            # [s]
+    odom_frame: odom
+    base_frame: base_footprint
+    scan_topic: scan
+    imu_topic: imu
+    odom_topic: odom
+    battery_topic: battery_state
+    wheel_ticks_per_rev: 1560       # encoder CPR * gear; CALIBRATE
+    motor_left_invert: false
+    motor_right_invert: true
+    pid_wheel:
+      kp: 8.0
+      ki: 0.4
+      kd: 0.05
+      output_limit: 1.0
+    safety:
+      bumper_stop: true
+      low_voltage_cutoff_v: 10.5
+      estop_topic: /medi/estop
+
+ports:
+  # Typical USB-UART / CAN mapping on Ubuntu (adjust after lsusb)
+  lidar: /dev/ttyUSB0
+  motor_control: /dev/ttyUSB1
+  imu: /dev/ttyUSB2
+  # or: motor_control_socketcan: can0

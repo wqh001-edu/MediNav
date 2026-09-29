@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>medinav_bringup</name>
+  <version>1.0.0</version>
+  <description>Top-level bringup launches for MediNav</description>
+  <maintainer email="medinav@example.com">MediNav</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>medinav_gazebo</exec_depend>
+  <exec_depend>medinav_navigation</exec_depend>
+  <exec_depend>medinav_task</exec_depend>
+  <exec_depend>medinav_perception</exec_depend>
+  <exec_depend>medinav_description</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

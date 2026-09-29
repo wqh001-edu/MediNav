@@ -1,0 +1,38 @@
+# ROS 2 / colcon
+build/
+install/
+log/
+*.user
+*.sdf.urdf
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+
+# ROS bags / large artifacts
+*.bag
+*.db3
+*.mcap
+rosbag2_*/
+
+# Generated maps (keep source pgm/yaml committed if small)
+# maps/*.pgm
+
+# Secrets
+.env
+*.pem
+credentials.json
+
+# Gazebo
+.gazebo/
+*.log

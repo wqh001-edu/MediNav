@@ -1,0 +1,8 @@
+# Semantic POIs for hospital_mini (optional override)
+pois:
+  pharmacy: {x: 4.5, y: 0.0, yaw: 3.14159}
+  charge_dock: {x: 6.2, y: 0.0, yaw: 0.0}
+  ward_1: {x: -2.0, y: 0.55, yaw: 1.5708}
+  ward_2: {x: -4.5, y: 0.55, yaw: 1.5708}
+  ward_3: {x: -7.0, y: 0.55, yaw: 1.5708}
+  ward_4: {x: -9.5, y: 0.55, yaw: 1.5708}
