@@ -1,4 +1,4 @@
-.PHONY: build clean test sim sim-only nav map order eval docker-build lint help
+.PHONY: build clean test sim sim-only nav map order eval mission bag docker-build lint help
 
 WS ?= .
 SHELL := /bin/bash
@@ -13,6 +13,8 @@ help:
 	@echo "  make map         - slam mapping mode"
 	@echo "  make order       - send order (WARD=ward_3)"
 	@echo "  make eval        - run scenario regression"
+	@echo "  make mission     - run morning_rounds mission (MISSION=path)"
+	@echo "  make bag         - record standard topic bag (DUR=60)"
 	@echo "  make clean       - remove build install log"
 
 build:
@@ -42,6 +44,12 @@ order:
 
 eval:
 	python3 tools/eval_scenarios.py --scenarios scenarios
+
+mission:
+	python3 -m medinav_mission.mission_runner $(or $(MISSION),src/medinav_mission/config/morning_rounds.yaml)
+
+bag:
+	ros2 run medinav_mission record_run --duration $(or $(DUR),60)
 
 docker-build:
 	docker build -t medinav:humble -f docker/Dockerfile .

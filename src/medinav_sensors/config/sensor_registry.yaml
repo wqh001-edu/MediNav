@@ -1,0 +1,105 @@
+# Sensor interface registry (real hardware mapping)
+# Each entry: topic, msg, frame, driver hint, min_hz
+
+sensors:
+  lidar_2d:
+    topic: scan
+    msg: sensor_msgs/LaserScan
+    frame: lidar_link
+    drivers: [rplidar_ros, ldlidar, sllidar, ydlidar, velodyne]
+    min_hz: 8
+    required: true
+
+  imu:
+    topic: imu
+    msg: sensor_msgs/Imu
+    frame: imu_link
+    drivers: [bno055, mpu6050_ros, wit_imu, microstrain]
+    min_hz: 50
+    required: true
+
+  wheel_odom:
+    topic: odom
+    msg: nav_msgs/Odometry
+    frame: odom
+    drivers: [diff_drive_controller, custom_mcu_odom]
+    min_hz: 20
+    required: true
+
+  camera_rgb:
+    topic: camera/image_raw
+    msg: sensor_msgs/Image
+    frame: camera_link
+    drivers: [usb_cam, v4l2_camera, realsense2_camera]
+    min_hz: 10
+    required: false
+
+  camera_depth:
+    topic: camera/depth/image_raw
+    msg: sensor_msgs/Image
+    frame: camera_depth_frame
+    drivers: [realsense2_camera, astra_camera, oak_d]
+    min_hz: 15
+    required: false
+
+  ultrasonic_array:
+    topics:
+      - ultrasonic/front
+      - ultrasonic/rear
+      - ultrasonic/fl
+      - ultrasonic/fr
+      - ultrasonic/rl
+      - ultrasonic/rr
+    msg: sensor_msgs/Range
+    drivers: [hcsr04_ros, tof_vl53l0x]
+    min_hz: 10
+    required: false
+
+  battery:
+    topic: battery_state
+    msg: sensor_msgs/BatteryState
+    drivers: [ina219_ros, mcu_battery]
+    min_hz: 1
+    required: true   # real robot
+
+  payload_temp:
+    topic: /medi/payload/temperature
+    msg: sensor_msgs/Temperature
+    drivers: [dht22, bme280, sht30]
+    min_hz: 0.5
+    required: false
+
+  payload_humidity:
+    topic: /medi/payload/humidity
+    msg: std_msgs/Float32
+    drivers: [dht22, bme280, sht30]
+    min_hz: 0.5
+    required: false
+
+  payload_present:
+    topic: /medi/payload/present
+    msg: std_msgs/Bool
+    drivers: [microswitch_gpio]
+    min_hz: 0
+    required: false
+
+  bumper:
+    topic: /medi/bumper
+    msg: std_msgs/Bool
+    drivers: [gpio_bumper]
+    min_hz: 0
+    required: false
+
+  estop:
+    topic: /medi/estop
+    msg: std_msgs/Bool
+    drivers: [gpio_estop]
+    min_hz: 0
+    required: true   # real robot
+
+  door_digit:
+    topic: /medi/digit
+    msg: std_msgs/String
+    drivers: [openmv_uart, camera_ocr]
+    min_hz: 0.5
+    required: false

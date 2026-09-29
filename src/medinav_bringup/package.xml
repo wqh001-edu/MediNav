@@ -14,6 +14,10 @@
   <exec_depend>medinav_task</exec_depend>
   <exec_depend>medinav_perception</exec_depend>
   <exec_depend>medinav_description</exec_depend>
+  <exec_depend>medinav_sensors</exec_depend>
+  <exec_depend>medinav_safety</exec_depend>
+  <exec_depend>medinav_fleet</exec_depend>
+  <exec_depend>medinav_mission</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

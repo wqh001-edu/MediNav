@@ -1,0 +1,10 @@
+# Fleet behavior parameters
+pause_gap_m: 0.70          # min rear-end gap (赛题 70cm)
+corridor_y_half_width: 0.8
+x_overlap_m: 1.2
+robots:
+  - robot_1
+  - robot_2
+relay:
+  enabled: true
+  pause_hold_sec: 2.0

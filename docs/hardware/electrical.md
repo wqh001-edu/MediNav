@@ -34,8 +34,14 @@
 | 激光雷达 | USB-UART | `/scan` | `lidar_link` |
 | IMU | I2C/UART | `/imu` | `imu_link` |
 | 相机 | USB UVC | `/camera/image_raw` | `camera_link` |
-| 电池 | ADC | `/battery_state` | — |
-| 药箱微动 | GPIO | `/medi/load` 服务触发 | — |
+| 深度相机 | USB3 (RealSense) | `/camera/depth/image_raw` | `camera_depth_frame` |
+| 超声×6 | GPIO/UART (HC-SR04/VL53L0X) | `/ultrasonic/*` | `ultrasonic_*_link` |
+| GPS（可选） | UART | `/gps/fix` | `gps_link` |
+| 电池 | ADC / INA219 | `/battery_state` | — |
+| 药箱温湿度 | I2C (SHT30/BME280) | `/medi/payload/*` | `payload_link` |
+| 药箱微动 | GPIO | `/medi/payload/present` | — |
+| 碰撞开关 | GPIO | `/medi/bumper` | — |
+| 急停 | GPIO + 硬件切断 | `/medi/estop` | — |
 
 ## 4. 串口映射（Ubuntu 实机）
 

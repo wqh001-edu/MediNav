@@ -1,0 +1,9 @@
+name: morning_rounds
+description: 依次送药到近中远病房
+legs:
+  - ward: ward_1
+    pause_sec: 2.0
+  - ward: ward_3
+    pause_sec: 2.0
+  - ward: ward_4
+    pause_sec: 1.0

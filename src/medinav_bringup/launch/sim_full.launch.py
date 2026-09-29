@@ -15,6 +15,8 @@ def generate_launch_description():
     pkg_nav = get_package_share_directory('medinav_navigation')
     pkg_task = get_package_share_directory('medinav_task')
     pkg_perc = get_package_share_directory('medinav_perception')
+    pkg_sensors = get_package_share_directory('medinav_sensors')
+    pkg_safety = get_package_share_directory('medinav_safety')
 
     use_sim_time = LaunchConfiguration('use_sim_time')
 
@@ -58,10 +60,34 @@ def generate_launch_description():
         ],
     )
 
+    sensors = TimerAction(
+        period=9.0,
+        actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    os.path.join(pkg_sensors, 'launch', 'sensors.launch.py')
+                ),
+            )
+        ],
+    )
+
+    safety = TimerAction(
+        period=11.0,
+        actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    os.path.join(pkg_safety, 'launch', 'safety.launch.py')
+                ),
+            )
+        ],
+    )
+
     return LaunchDescription([
         DeclareLaunchArgument('use_sim_time', default_value='true'),
         sim,
         nav,
+        sensors,
         perception,
+        safety,
         task,
     ])

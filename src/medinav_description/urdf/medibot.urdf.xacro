@@ -403,6 +403,156 @@
     <origin xyz="0 0 ${-chassis_height/2 + 0.01}" rpy="0 0 0"/>
   </joint>
 
+  <!-- ===================== Ultrasonic ring ===================== -->
+  <xacro:macro name="ultrasonic" params="name x y yaw">
+    <link name="ultrasonic_${name}_link">
+      <visual>
+        <geometry>
+          <cylinder radius="0.012" length="0.012"/>
+        </geometry>
+        <material name="medinav_grey"/>
+      </visual>
+      <xacro:cylinder_inertia mass="0.01" r="0.012" h="0.012"/>
+    </link>
+    <joint name="ultrasonic_${name}_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="ultrasonic_${name}_link"/>
+      <origin xyz="${x} ${y} 0" rpy="0 0 ${yaw}"/>
+    </joint>
+    <gazebo reference="ultrasonic_${name}_link">
+      <sensor name="us_${name}" type="ray">
+        <always_on>true</always_on>
+        <update_rate>20</update_rate>
+        <visualize>false</visualize>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>5</samples>
+              <resolution>1</resolution>
+              <min_angle>-0.26</min_angle>
+              <max_angle>0.26</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.02</min>
+            <max>4.0</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <plugin name="us_${name}_plugin" filename="libgazebo_ros_ray_sensor.so">
+          <ros>
+            <remapping>~/out:=ultrasonic/${name}</remapping>
+          </ros>
+          <output_type>sensor_msgs/Range</output_type>
+          <frame_name>ultrasonic_${name}_link</frame_name>
+          <radiation_type>ultrasound</radiation_type>
+          <fov>0.52</fov>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:ultrasonic name="front" x="${chassis_length/2}" y="0" yaw="0"/>
+  <xacro:ultrasonic name="rear" x="${-chassis_length/2}" y="0" yaw="${M_PI}"/>
+  <xacro:ultrasonic name="fl" x="${chassis_length/2 - 0.04}" y="${chassis_width/2 - 0.03}" yaw="0.6"/>
+  <xacro:ultrasonic name="fr" x="${chassis_length/2 - 0.04}" y="${-chassis_width/2 + 0.03}" yaw="-0.6"/>
+  <xacro:ultrasonic name="rl" x="${-chassis_length/2 + 0.04}" y="${chassis_width/2 - 0.03}" yaw="2.5"/>
+  <xacro:ultrasonic name="rr" x="${-chassis_length/2 + 0.04}" y="${-chassis_width/2 + 0.03}" yaw="-2.5"/>
+
+  <!-- ===================== Depth camera frame ===================== -->
+  <link name="camera_depth_frame">
+    <visual>
+      <geometry>
+        <box size="0.025 0.08 0.025"/>
+      </geometry>
+      <material name="medinav_blue"/>
+    </visual>
+    <xacro:box_inertia mass="0.04" x="0.025" y="0.08" z="0.025"/>
+  </link>
+  <joint name="camera_depth_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_depth_frame"/>
+    <origin xyz="0 0 0.02" rpy="0 0 0"/>
+  </joint>
+  <gazebo reference="camera_depth_frame">
+    <sensor name="depth_camera" type="depth">
+      <always_on>true</always_on>
+      <update_rate>15</update_rate>
+      <camera>
+        <horizontal_fov>1.047</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>8.0</far>
+        </clip>
+      </camera>
+      <plugin name="depth_camera_controller" filename="libgazebo_ros_camera.so">
+        <ros>
+          <remapping>~/image_raw:=camera/depth/image_raw</remapping>
+          <remapping>~/depth/image_raw:=camera/depth/image_raw</remapping>
+          <remapping>~/camera_info:=camera/depth/camera_info</remapping>
+          <remapping>~/points:=camera/depth/points</remapping>
+        </ros>
+        <frame_name>camera_depth_frame</frame_name>
+        <min_depth>0.1</min_depth>
+        <max_depth>8.0</max_depth>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- ===================== GPS / magnetometer (outdoor ext) ===================== -->
+  <link name="gps_link">
+    <visual>
+      <geometry>
+        <box size="0.03 0.03 0.012"/>
+      </geometry>
+      <material name="medinav_white"/>
+    </visual>
+    <xacro:box_inertia mass="0.015" x="0.03" y="0.03" z="0.012"/>
+  </link>
+  <joint name="gps_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="gps_link"/>
+    <origin xyz="-0.05 0 ${chassis_height/2 + 0.02}" rpy="0 0 0"/>
+  </joint>
+  <gazebo reference="gps_link">
+    <sensor name="gps_sensor" type="gps">
+      <always_on>true</always_on>
+      <update_rate>5</update_rate>
+      <gps>
+        <position_sensing>
+          <horizontal>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.5</stddev>
+            </noise>
+          </horizontal>
+          <vertical>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>1.0</stddev>
+            </noise>
+          </vertical>
+        </position_sensing>
+      </gps>
+      <plugin name="gps_plugin" filename="libgazebo_ros_gps_sensor.so">
+        <ros>
+          <remapping>~/out:=gps/fix</remapping>
+        </ros>
+        <frame_name>gps_link</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
   <!-- ===================== ros2_control ===================== -->
   <ros2_control name="GazeboSystem" type="system">
     <hardware>

@@ -34,12 +34,16 @@ make order WARD=ward_3
 ```
 MediNav/
 ├── src/
-│   ├── medinav_description/   # URDF 数字样机
+│   ├── medinav_description/   # URDF 数字样机（激光/IMU/相机/深度/超声/电池）
 │   ├── medinav_gazebo/        # 医院世界、spawn、仿真 launch
 │   ├── medinav_navigation/    # Nav2 参数、地图、规划器
 │   ├── medinav_task/          # 送药任务状态机 / 服务
 │   ├── medinav_perception/    # 门牌识别接口（仿真可 mock）
-│   ├── medinav_bringup/       # 一键 bringup
+│   ├── medinav_sensors/       # 传感器注册表、健康监测、超声/货舱环境
+│   ├── medinav_safety/        # 急停/碰撞/低电/近障 安全总管
+│   ├── medinav_fleet/         # 双车互斥、接力暂停、防撞
+│   ├── medinav_mission/       # 多航点任务、rosbag、Foxglove
+│   ├── medinav_bringup/       # 一键 bringup（仿真/真机）
 │   └── medinav_hardware/      # 真机接口、标定、BOM 对齐
 ├── scenarios/                 # 任务场景 YAML
 ├── maps/                      # 栅格地图与语义 POI
@@ -48,15 +52,38 @@ MediNav/
 └── docs/                      # 架构、硬件采购与接线
 ```
 
+## 传感器与接口一览
+
+| 传感器 | 话题 | 仿真 | 真机驱动建议 |
+|---|---|---|---|
+| 2D 激光雷达 | `/scan` | Gazebo ray | RPLIDAR / LD19 / YDLidar |
+| IMU | `/imu` | Gazebo IMU | BNO055 / MPU6050 |
+| 轮式里程计 | `/odom` | diff_drive_controller | MCU 编码器 |
+| RGB 相机 | `/camera/image_raw` | Gazebo camera | USB UVC / OpenMV |
+| 深度相机 | `/camera/depth/image_raw` | Gazebo depth | RealSense / Astra |
+| 超声×6 | `/ultrasonic/{front,rear,fl,fr,rl,rr}` | Gazebo ray | HC-SR04 / VL53L0X |
+| GPS（室外扩展） | `/gps/fix` | Gazebo GPS | NEO-M8N |
+| 电池 | `/battery_state` | 可 mock | INA219 / MCU ADC |
+| 药箱温湿度 | `/medi/payload/temperature` `/humidity` | 模拟 | SHT30 / BME280 |
+| 药箱在位 | `/medi/payload/present` | 模拟 | 微动开关 |
+| 碰撞 | `/medi/bumper` | 服务触发 | 行程开关 |
+| 急停 | `/medi/estop` | 话题 | 硬件自锁 + GPIO |
+| 门牌数字 | `/medi/digit` | mock | OpenMV OCR |
+
+完整注册表：`src/medinav_sensors/config/sensor_registry.yaml`。
+
 ## 常用命令
 
 ```bash
 make build          # colcon build
 make test           # 单元/集成测试
-make sim            # 仿真 + 导航 + 任务栈
+make sim            # 仿真 + 导航 + 任务 + 传感器 + 安全
 make sim-only       # 仅 Gazebo + 机器人
 make nav            # 仅导航（已有仿真时）
 make map            # SLAM 建图模式
+make order WARD=ward_3
+make mission        # 多病房巡药
+make bag DUR=60     # 录标准 rosbag
 make eval           # 跑 scenarios/ 回归
 make docker-build   # 可选：容器化环境
 ```

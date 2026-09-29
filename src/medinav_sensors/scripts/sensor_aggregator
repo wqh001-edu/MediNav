@@ -1,0 +1,5 @@
+#!/usr/bin/env python3
+from medinav_sensors.sensor_aggregator import main
+
+if __name__ == '__main__':
+    main()
